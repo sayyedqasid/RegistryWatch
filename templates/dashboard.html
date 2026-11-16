@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RegistryWatch Dashboard</title><link rel="stylesheet" href="/static/style.css"></head>
+<body><header><div><small>WINDOWS DEFENSIVE SECURITY PROJECT</small><h1>RegistryWatch</h1></div><span>● READ-ONLY MONITOR</span></header>
+<main><section class="intro"><div><small>REGISTRY CHANGE DETECTION</small><h2>Spot unexpected startup changes.</h2>
+<p>Monitor selected Windows Registry locations, compare them with a baseline, and review recorded changes.</p></div>
+<div class="buttons"><form action="/start" method="post"><button>Start monitoring</button></form><form action="/stop" method="post"><button class="secondary">Stop</button></form></div></section>
+<section class="cards">
+<div class="card"><label>Monitor status</label><strong>{{ "Running" if status.running else "Stopped" }}</strong><small>Scans every 5 seconds</small></div>
+<div class="card"><label>Baseline</label><strong>{{ "Created" if status.baseline_exists else "Not created" }}</strong><small>Known-good snapshot</small></div>
+<div class="card"><label>Locations</label><strong>{{ status.locations }}</strong><small>Configured paths</small></div>
+<div class="card"><label>Events</label><strong>{{ status.event_count }}</strong><small>Saved locally</small></div></section>
+<div class="notice"><b>Important:</b> A registry change is not automatically malware. Investigate the change and its context. This project reads registry values only; it does not edit or delete them.</div>
+<section class="panel"><h2>Recent events</h2><div class="scroll"><table><thead><tr><th>Time</th><th>Severity</th><th>Event</th><th>Location</th><th>Value name</th><th>New value / details</th></tr></thead><tbody>
+{% for e in events %}<tr><td>{{ e.timestamp }}</td><td><span class="badge {{ e.severity }}">{{ e.severity }}</span></td><td>{{ e.kind }}</td><td>{{ e.location }}</td><td>{{ e.name }}</td><td>{{ e.new_value }}</td></tr>
+{% else %}<tr><td colspan="6" class="empty">No events yet. Click Start monitoring.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<p class="foot">Last scan: {{ status.last_scan or "Not scanned yet" }}</p>{% if status.last_error %}<p class="error">{{ status.last_error }}</p>{% endif %}
+</main></body></html>
