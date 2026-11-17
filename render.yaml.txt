@@ -4,4 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn cloud_app:app
+    envVars:
+      - key: REGISTRYWATCH_API_KEY
+        generateValue: true
