@@ -91,8 +91,7 @@ def api_status():
 @app.route("/api/events")
 def api_events():
     return jsonify(load_events())
-
+print(app.url_map)
 
 if __name__ == "__main__":
-    print(app.url_map)
     app.run(port=7000, debug=False)
